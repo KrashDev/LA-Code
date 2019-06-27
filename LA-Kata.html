@@ -14,10 +14,11 @@
   <main>
     <!-- Generally I will put an aria-label on the form element to label it for screen readers because we don't have access to the legend element. -->
     <!-- <form>
-      <fieldset>
-        <legend role="heading" aria-level="1">Level Access Accessible login</legend> -->
+    <fieldset>
+      <legend role="heading" aria-level="1">Level Access Accessible login</legend> -->
     <form aria-label="Level Access Accessible login">
       <p class="form-title" role="heading" aria-level="1">Login</p>
+      <p class="error-message" tabindex="-1"></p>
       <p>
         <label for="username">Username:</label>
         <!-- I've added aria-required attributes to these inputs because generally these are required inputs to submit the form -->
@@ -26,11 +27,12 @@
       <p>
         <!-- You could aos use the aria-describedby attribute -->
         <label for="password">Password:</label>
-        <input aria-required="true" type="text" id="password" name="pass_word">
+        <span id="password_constraint">Password must include one capital letter, one lower case letter, and at least one number.</span>
+        <input aria-describedby="password_constraint" aria-required="true" type="text" id="password" name="pass_word">
       </p>
       </fieldset>
-
-      <button id="login-submit">Submit</button>
+      <!-- submit button -->
+      <button id="login-submit" value="validate">Submit</button>
     </form>
   </main>
 
@@ -42,7 +44,7 @@
     main {
       background: #ffffff;
       position: absolute;
-      top: 30%;
+      top: 20%;
       left: 30%;
       width: 400px;
       height: auto;
@@ -53,6 +55,10 @@
     .form-title {
       font-size: 35px;
       border-bottom: 1px solid #000000;
+    }
+
+    span#password_constraint {
+      display: none;
     }
 
     input {
@@ -69,6 +75,8 @@
     }
 
     button#login-submit {
+      width: 100px;
+      text-align: center;
       padding: 5px 10px 5px 10px;
       border-radius: 10px;
       font-size: 20px;
@@ -76,21 +84,52 @@
       color: #ffffff;
     }
 
-    /* Hex codes for Level Access colors in logo */
-
-    /* #7b6eb5 #4165e1 #a0d699 */
+    /* Hex codes for Level Access colors in logo #7b6eb5 #4165e1 #a0d699 */
   </style>
-
-  <script>
-    $('#login-submit').click(function() {
-      var passwordInput = $('input#password').val();
-      console.log(passwordInput);
-    });
-  </script>
 
   <script src="https://code.jquery.com/jquery-3.2.1.js "></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js "></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js "></script>
+
+  <script>
+    $('#login-submit').click(function(event) {
+      event.preventDefault();
+      usernameCheck();
+    });
+
+    // username validation function
+    usernameCheck = function(validate) {
+      var usernameValue = $('input#username').val();
+      var passwordValue = $('input#password').val();
+      if (usernameValue !== 'level' && passwordValue !== 'Access123') {
+        $('.error-message').text('I\'m sorry the username/password combination was not recognized');
+        $('.error-message').focus();
+      } else {
+        alert('Congratulations your login was successful');
+        location.href = "www.google.com";
+      }
+    };
+
+    // password validation function
+    // passwordCheck = function(validate) {
+    //   var passwordValue = $('input#password').val();
+    //   // Here I am checking the length of the password to make sure it is at least 10 characters long, longer is always more secure
+    //   if (passwordValue.length < 9) {
+    //     console.log("I'm sorry your password must be at least 9 characters long");
+    //     // Here I am checking to make sure the password contains at least one number using RegEx
+    //   } else if (passwordValue.search(/[0-9]/) == -1) {
+    //     console.log("I'm sorry your password must contain at least one number");
+    //     // Here I am checking to make sure the password contains at least one lower case letter using RegEx
+    //   } else if (passwordValue.search(/[a-z]/) == -1) {
+    //     console.log("I'm sorry your password must contain at least one lower case letter");
+    //     // Here I am checking to make sure the password contains at least one upper case letter using RegEx
+    //   } else if (passwordValue.search(/[A-Z]/) == -1) {
+    //     console.log("I'm sorry your password must contain at least one upper case letter");
+    //   } else {
+    //     location.href = "www.google.com";
+    //   }
+    // };
+  </script>
 </body>
 
 </html>
